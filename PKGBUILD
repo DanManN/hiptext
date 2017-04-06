@@ -17,30 +17,43 @@ makedepends=('ffmpeg'
              'libpng12'
              'ragel')
 source=("https://github.com/jart/$pkgname/releases/download/$pkgver/$pkgname-$pkgver.tar.gz"
+        'hiptext.sh'
+        'gflags_namespace.patch'
         'build_with_latest_ffmpeg.patch')
 sha256sums=('7f2217dec8775b445be6745f7bd439c24ce99c4316a9faf657bee7b42bc72e8f'
+            'bd97c23995f372326d8d2b0b70591b595e169dbd0006317c299bfd6f44df43dc'
+            'ba251b4847be9f45192b60605d6211254f46c310909f706ce91eb9ff9d4f4e15'
             '59482f694811569d08596c07c2461ad9adb6c74c500b6a8755889a78eb27f4b1')
 
 prepare() {
-	cd "$pkgname-$pkgver"
-	patch -p1 -i "$srcdir/build_with_latest_ffmpeg.patch"
-        ./configure --prefix=/usr             \
-                    --includedir=/usr/include \
-                    --libdir=/usr/lib         \
-                    --datarootdir=/usr/share  \
-                    --sysconfdir=/etc         \
-                    --localstatedir=/var      \
-                    --sharedstatedir=/com     \
-                    LIBGFLAGS_LIBS="-lgflags" \
-                    LIBGFLAGS_CFLAGS="-lgflags"
+    cd "$pkgname-$pkgver"
+    msg2 'Applying patches...'
+    patch -p1 -i "$srcdir/build_with_latest_ffmpeg.patch"
+    # patch -p1 -i "$srcdir/gflags_namespace.patch"  # optional
+    msg2 'Configuring...'
+    ./configure --prefix=/usr             \
+                --includedir=/usr/include \
+                --libdir=/usr/lib         \
+                --datarootdir=/usr/share  \
+                --sysconfdir=/etc         \
+                --localstatedir=/var      \
+                --sharedstatedir=/com     \
+                LIBGFLAGS_LIBS="-lgflags" \
+                LIBGFLAGS_CFLAGS="-lgflags"
 }
 
 build() {
-	cd "$pkgname-$pkgver"
-	make
+    cd "$pkgname-$pkgver"
+    msg2 'Building...'
+    make
 }
 
 package() {
-	cd "$pkgname-$pkgver"
-	make DESTDIR="$pkgdir" install
+    cd "$pkgname-$pkgver"
+    msg2 'Installing...'
+    make DESTDIR="$pkgdir/usr/share/$pkgname" install
+    install -d "$pkgdir/usr/share/$pkgname/fonts"
+    install -Dm644 "$srcdir/$pkgname-$pkgver/DejaVuSansMono.ttf" \
+                   "$pkgdir/usr/share/hiptext/fonts/DejaVuSansMono.ttf"
+    install -Dm755 "$srcdir/hiptext.sh" "$pkgdir/usr/bin/hiptext"
 }
