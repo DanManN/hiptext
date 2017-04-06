@@ -1,0 +1,22 @@
+pkgbase = hiptext
+	pkgdesc = Command line tool for rendering images and videos inside terminals.
+	pkgver = 0.2
+	pkgrel = 1
+	url = https://github.com/jart/hiptext
+	arch = any
+	license = GPL
+	makedepends = ffmpeg
+	makedepends = freetype2
+	makedepends = giflib
+	makedepends = libjpeg-turbo
+	makedepends = libpng12
+	makedepends = ragel
+	depends = gflags
+	depends = google-glog
+	source = https://github.com/jart/hiptext/releases/download/0.2/hiptext-0.2.tar.gz
+	source = build_with_latest_ffmpeg.patch
+	sha256sums = 7f2217dec8775b445be6745f7bd439c24ce99c4316a9faf657bee7b42bc72e8f
+	sha256sums = 59482f694811569d08596c07c2461ad9adb6c74c500b6a8755889a78eb27f4b1
+
+pkgname = hiptext
+
