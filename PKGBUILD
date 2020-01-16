@@ -41,7 +41,7 @@ prepare() {
     patch -p1 -i "$srcdir/add_gif_extension.patch"
     # patch -p1 -i "$srcdir/gflags_namespace.patch"  # optional
     msg2 'Running Autogen... '
-    ./autogen.sh || ./autogen.sh
+    ./autogen.sh
     msg2 'Configuring...'
      ./configure --prefix=/usr             \
                  --includedir=/usr/include \
